@@ -1,5 +1,6 @@
 #include <vector>
 #include <GL/glut.h>
+
 GLUnurbsObj* nobj;
 const int N = 6, K = 6;
 float scale = 0.01f;
@@ -12,8 +13,7 @@ GLfloat ctlarray[][2] = {
         {20*scale, 90*scale},
 };
 
-void init(void)
-{
+void init() {
     glClearColor(1.0, 1.0, 1.0, 1.0);
     nobj = gluNewNurbsRenderer();
     gluNurbsProperty(nobj, GLU_SAMPLING_TOLERANCE, 25.0);
@@ -45,8 +45,7 @@ float basis(int i, int k, float t, const std::vector<float>& knot) {
     return a * basis(i, k - 1, t, knot) + b * basis(i + 1, k - 1, t, knot);
 }
 
-void DisplayCurve()
-{
+void DisplayCurve() {
     std::vector<float> knot(N + K, 0.0f);
     for(int i = K; i < N + K; ++i) {
         if (i < N + 1) {
@@ -56,8 +55,6 @@ void DisplayCurve()
         }
     }
     glClear(GL_COLOR_BUFFER_BIT);
-    glLineWidth(3.0);
-    glColor3f(0.0, 0.0, 0.0);
     glPointSize(4.0);
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_POINTS);
@@ -65,7 +62,6 @@ void DisplayCurve()
     for (int i = 0; i < N; i++) {
         glVertex2f(ctlarray[i][0] + dx, ctlarray[i][1]);
     }
-    glColor3f(0.0, 0.0, 0.0);
     for (float t = 0.0f; t < 2.0f; t += 0.005f) {
         std::pair<float, float> ptr = { 0.0f, 0.0f };
         for (int i = 0; i < N; i++) {
@@ -78,15 +74,14 @@ void DisplayCurve()
 
     for (float t = 0.0f; t < 2.0f; t += 0.005f) {
         for (int i = 0; i < N; i++) {
-            glVertex2f(t - dx, basis(i, K - 1, t, knot) * 0.5 - 0.25);
+            glVertex2f(t - dx, basis(i, K - 1, t, knot) - 0.8);
         }
     }
     glEnd();
     glFlush();
 }
 
-int main()
-{
+int main() {
     glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
     glutInitWindowSize(480, 480);
     glutInitWindowPosition(100, 100);
